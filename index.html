@@ -30,7 +30,7 @@
     <form class="needs-validation" novalidate>
       <div class="form-group">
         <label for="countries">Nazione</label>
-        <select class="form-control" id="countries" onchange="if (this.selectedIndex) openYear();" required>
+        <select class="form-control" id="countries" onchange="if (this.selectedIndex) fillYear();" required>
         </select>
       </div>
       <div class="form-group">
@@ -159,11 +159,9 @@
       return bestHolidays;
     }
 
-    function openYear() {
+    function fillYear() {
       const countrySelection = document.getElementById("countries");
       const country = obj.holidaysPerCountry[countrySelection.value];
-
-      console.log(`Selected country: ${country.country}`);
 
       const yearsDropdown = document.getElementById("years");
       yearsDropdown.innerHTML = '<option value="-1"></option>';
@@ -194,14 +192,14 @@
       // Loop over them and prevent submission
       var validation = Array.prototype.filter.call(forms, function(form) {
         form.addEventListener('submit', function(event) {
+          event.preventDefault();
           if (form.checkValidity() === false) {
-            event.preventDefault();
-            event.stopPropagation();
+              event.stopPropagation();
+          }
+          else {
+            findBestDays();
           }
           form.classList.add('was-validated');
-          event.preventDefault();
-          event.stopPropagation();
-          findBestDays();
         }, false);
       });
     });
