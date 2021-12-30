@@ -30,17 +30,17 @@
     <form class="needs-validation" novalidate>
       <div class="form-group">
         <label for="countries">Nazione</label>
-        <select class="form-control" id="countries" onchange="if (this.selectedIndex) openYear();">
+        <select class="form-control" id="countries" onchange="if (this.selectedIndex) openYear();" required>
         </select>
       </div>
       <div class="form-group">
         <label for="years">Anno</label>
-        <select class="form-control" id="years">
+        <select class="form-control" id="years" required>
         </select>
       </div>
       <div class="form-group">
         <label for="leavedays">Giorni di ferie disponibili</label>
-        <input type="number" class="form-control" id="leavedays">
+        <input type="number" class="form-control" id="leavedays" required>
       </div>
       <button type="submit" id="calculate" class="btn btn-primary">Calcola</button>
     </form>
@@ -166,7 +166,7 @@
       console.log(`Selected country: ${country.country}`);
 
       const yearsDropdown = document.getElementById("years");
-      yearsDropdown.innerHTML = '<option value="-1">--</option>';
+      yearsDropdown.innerHTML = '<option value="-1"></option>';
       for (let i = 0; i < country.years.length; i++) {
         let opt = document.createElement('option');
         opt.value = i;
@@ -181,7 +181,7 @@
     $(document).ready(function () {
 
       const countriesDropdown = document.getElementById("countries");
-      countriesDropdown.innerHTML = '<option value="-1">--</option>';
+      countriesDropdown.innerHTML = '<option value="-1"></option>';
       for (let i = 0; i < obj.holidaysPerCountry.length; i++) {
         let opt = document.createElement('option');
         opt.value = i;
@@ -194,12 +194,13 @@
       // Loop over them and prevent submission
       var validation = Array.prototype.filter.call(forms, function(form) {
         form.addEventListener('submit', function(event) {
-          console.log('aaaaaa');
           if (form.checkValidity() === false) {
             event.preventDefault();
             event.stopPropagation();
           }
           form.classList.add('was-validated');
+          event.preventDefault();
+          event.stopPropagation();
           findBestDays();
         }, false);
       });
