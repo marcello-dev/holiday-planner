@@ -1,38 +1,56 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  <title>Holiday Planner</title>
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+</head>
 
 <body>
+  <div class="container">
+    <!-- <h1>Holiday planner</h1> -->
+    <h1>Calcola ferie</h1>
 
-  <!-- <h2>Holiday planner</h2> -->
-  <h1>Calcola ferie</h1>
+    <form class="needs-validation" novalidate>
+      <div class="form-group">
+        <label for="countries">Nazione</label>
+        <select class="form-control" id="countries" onchange="if (this.selectedIndex) openYear();">
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="years">Anno</label>
+        <select class="form-control" id="years">
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="leavedays">Giorni di ferie disponibili</label>
+        <input type="number" class="form-control" id="leavedays">
+      </div>
+      <button type="submit" id="calculate" class="btn btn-primary">Calcola</button>
+    </form>
 
-  <!-- <label for="countries">Select a country:</label> -->
-  <label for="countries" style="font-size: 20px;">Nazione:</label>
-  <select name="countries" id="countries" onchange="if (this.selectedIndex) openYear();">
-  </select>
+    <hr>
 
-  <br><br>
-  <!-- <label for="years">Select a year:</label> -->
-  <label for="years" style="font-size: 20px;">Anno:</label>
-  <select name="years" id="years">
-    <option value="-1">--</option>
-  </select>
+    <h2>Migliori possibilita':</h2>
+    <div id="result"></div>
 
-  <br><br>
-
-  <!-- <label for="leavedays">Enter leave days:</label> -->
-  <label for="leavedays" style="font-size: 20px;">Giorni di ferie disponibili:</label>
-  <input type="number" id="leavedays" name="leavedays">
-
-  <br><br>
-  <!-- <input type="button" id="calculate" value="Calculate" onclick="findBestDays()"> -->
-  <input type="button" id="calculate" style="font-size: 20px;" value="Calcola" onclick="findBestDays()">
-
-  <hr>
-
-  <h2>Migliori possibilita':</h2>
-  <div id="result"></div>
-
+  </div>
   <script>
     function daysInYear(year) {
       return ((year % 4 === 0 && year % 100 > 0) || year % 400 == 0) ? 366 : 365;
@@ -68,7 +86,7 @@
       resultDiv.innerHTML = '';
       for (const day of bestHolidays) {
         const formattedDate = day.toLocaleString('default', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-        resultDiv.innerHTML += `<p style="font-size: 20px;">${formattedDate}</p>`;
+        resultDiv.innerHTML += `<p>${formattedDate}</p>`;
       }
     }
 
@@ -146,6 +164,7 @@
       const country = obj.holidaysPerCountry[countrySelection.value];
 
       console.log(`Selected country: ${country.country}`);
+
       const yearsDropdown = document.getElementById("years");
       yearsDropdown.innerHTML = '<option value="-1">--</option>';
       for (let i = 0; i < country.years.length; i++) {
@@ -159,25 +178,42 @@
     const holidaysPerCountry = '{"holidaysPerCountry":[{"country":"Italy","years":[{"year":2021,"publicHolidays":[{"day":"2021-01-01","description_en":"New Year Day"},{"day":"2021-01-06","description_en":"Epiphany"},{"day":"2021-04-04","description_en":"Easter Sunday"},{"day":"2021-04-05","description_en":"Easter Monday"},{"day":"2021-04-25","description_en":"Liberation Day"},{"day":"2021-05-01","description_en":"International Workers Day"},{"day":"2021-06-02","description_en":"Republic Day"},{"day":"2021-08-15","description_en":"Assumption Day"},{"day":"2021-11-01","description_en":"All Saints Day"},{"day":"2021-12-08","description_en":"Immaculate Conception"},{"day":"2021-12-25","description_en":"Christmas Day"},{"day":"2021-12-26","description_en":"St Stephen Day"}]},{"year":2022,"publicHolidays":[{"day":"2022-01-01","description_en":"New Year Day"},{"day":"2022-01-06","description_en":"Epiphany"},{"day":"2022-04-17","description_en":"Easter Sunday"},{"day":"2022-04-18","description_en":"Easter Monday"},{"day":"2022-04-25","description_en":"Liberation Day"},{"day":"2022-05-01","description_en":"International Workers Day"},{"day":"2022-06-02","description_en":"Republic Day"},{"day":"2022-08-15","description_en":"Assumption Day, Ferragosto"},{"day":"2022-11-01","description_en":"All Saints Day"},{"day":"2022-12-08","description_en":"Immaculate Conception"},{"day":"2022-12-25","description_en":"Christmas Day"},{"day":"2022-12-26","description_en":"St Stephen Day"}]}]},{"country":"Taiwan","years":[{"year":2022,"publicHolidays":[{"day":"2022-01-01","description_en":"New Years Day"},{"day":"2022-01-29","description_en":"Chinese New Year"},{"day":"2022-01-30","description_en":"Chinese New Year"},{"day":"2022-01-31","description_en":"Chinese New Year"},{"day":"2022-02-01","description_en":"Chinese New Year"},{"day":"2022-02-02","description_en":"Chinese New Year"},{"day":"2022-02-03","description_en":"Chinese New Year"},{"day":"2022-02-04","description_en":"Chinese New Year"},{"day":"2022-02-05","description_en":"Chinese New Year"},{"day":"2022-02-06","description_en":"Chinese New Year"},{"day":"2022-02-28","description_en":"Peace Memorial Day"},{"day":"2022-04-04","description_en":"Children Day"},{"day":"2022-04-05","description_en":"Qingming Festival"},{"day":"2022-05-02","description_en":"Labour Day"},{"day":"2022-06-03","description_en":"Dragon Boat Festival"},{"day":"2022-09-10","description_en":"Mid-Autumn Festival"},{"day":"2022-10-10","description_en":"National Day"}]}]}]}';
     const obj = JSON.parse(holidaysPerCountry);
 
-    const countriesDropdown = document.getElementById("countries");
-    countriesDropdown.innerHTML = '<option value="-1">--</option>';
-    for (let i = 0; i < obj.holidaysPerCountry.length; i++) {
-      let opt = document.createElement('option');
-      opt.value = i;
-      opt.innerHTML = obj.holidaysPerCountry[i].country;
-      countriesDropdown.appendChild(opt);
-    }
+    $(document).ready(function () {
+
+      const countriesDropdown = document.getElementById("countries");
+      countriesDropdown.innerHTML = '<option value="-1">--</option>';
+      for (let i = 0; i < obj.holidaysPerCountry.length; i++) {
+        let opt = document.createElement('option');
+        opt.value = i;
+        opt.innerHTML = obj.holidaysPerCountry[i].country;
+        countriesDropdown.appendChild(opt);
+      }
+
+
+      var forms = document.getElementsByClassName('needs-validation');
+      // Loop over them and prevent submission
+      var validation = Array.prototype.filter.call(forms, function(form) {
+        form.addEventListener('submit', function(event) {
+          console.log('aaaaaa');
+          if (form.checkValidity() === false) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          form.classList.add('was-validated');
+          findBestDays();
+        }, false);
+      });
+    });
+
   </script>
+
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-NYVQZZ4CJD"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
-
     gtag('config', 'G-NYVQZZ4CJD');
   </script>
-
 </body>
-
 </html>
