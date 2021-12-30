@@ -3,171 +3,180 @@
 
 <body>
 
-    <!-- <h2>Holiday planner</h2> -->
-    <h2>Calcola ferie</h2>
+  <!-- <h2>Holiday planner</h2> -->
+  <h2>Calcola ferie</h2>
 
-    <!-- <label for="countries">Select a country:</label> -->
-    <label for="countries">Seleziona nazione:</label>
-    <select name="countries" id="countries" onchange="if (this.selectedIndex) openYear();">
-    </select>
+  <!-- <label for="countries">Select a country:</label> -->
+  <label for="countries">Seleziona nazione:</label>
+  <select name="countries" id="countries" onchange="if (this.selectedIndex) openYear();">
+  </select>
 
-    <br><br>
-    <!-- <label for="years">Select a year:</label> -->
-    <label for="years">Seleziona anno:</label>
-    <select name="years" id="years">
-        <option value="-1">--</option>
-    </select>
+  <br><br>
+  <!-- <label for="years">Select a year:</label> -->
+  <label for="years">Seleziona anno:</label>
+  <select name="years" id="years">
+    <option value="-1">--</option>
+  </select>
 
-    <br><br>
+  <br><br>
 
-    <!-- <label for="leavedays">Enter leave days:</label> -->
-    <label for="leavedays">Giorni di ferie disponibili:</label>
-    <input type="number" id="leavedays" name="leavedays">
+  <!-- <label for="leavedays">Enter leave days:</label> -->
+  <label for="leavedays">Giorni di ferie disponibili:</label>
+  <input type="number" id="leavedays" name="leavedays">
 
-    <br><br>
-    <!-- <input type="button" id="calculate" value="Calculate" onclick="findBestDays()"> -->
-    <input type="button" id="calculate" value="Calcola" onclick="findBestDays()">
-    
-    <hr>
+  <br><br>
+  <!-- <input type="button" id="calculate" value="Calculate" onclick="findBestDays()"> -->
+  <input type="button" id="calculate" value="Calcola" onclick="findBestDays()">
 
-    <h4>Migliori possibilita':</h4>
-    <div id="result"></div>
+  <hr>
 
-    <script>
-        function daysInYear(year) {
-            return ((year % 4 === 0 && year % 100 > 0) || year % 400 == 0) ? 366 : 365;
+  <h4>Migliori possibilita':</h4>
+  <div id="result"></div>
+
+  <script>
+    function daysInYear(year) {
+      return ((year % 4 === 0 && year % 100 > 0) || year % 400 == 0) ? 366 : 365;
+    }
+
+    function daysIntoYear(date) {
+      return (Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) - Date.UTC(date.getFullYear(), 0, 0)) / 24 / 60 / 60 / 1000;
+    }
+
+    function dateFromDay(year, day) {
+      const date = new Date(year, 0);
+      return new Date(date.setDate(day));
+    }
+
+    function findBestDays() {
+      const countrySelection = document.getElementById("countries");
+      const country = obj.holidaysPerCountry[countrySelection.value];
+
+      const yearsDropdown = document.getElementById("years");
+      const year = country.years[yearsDropdown.value];
+
+      const leavedaysInput = document.getElementById("leavedays");
+
+      let publicHolidaysDates = [];
+      for (const publicHoliday of year.publicHolidays) {
+        const datePublicHoliday = new Date(publicHoliday.day);
+        publicHolidaysDates.push(datePublicHoliday);
+      }
+      const bestHolidays = best(year.year, publicHolidaysDates, leavedaysInput.value);
+
+      // print bestholidays
+      const resultDiv = document.getElementById("result");
+      resultDiv.innerHTML = '';
+      for (const day of bestHolidays) {
+        const formattedDate = day.toLocaleString('default', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        resultDiv.innerHTML += `<p>${formattedDate}</p>`;
+      }
+    }
+
+    function allocate(yearAsArray, leaveDays) {
+      const allocations = [];
+      for (let i = 0; i < leaveDays; i++) {
+        let slots = [];
+        let slot = [-1, -1];
+        for (let j = 0; j < yearAsArray.length; j++) {
+          if (!yearAsArray[j] && slot[0] == -1) {
+            slot[0] = j;
+          }
+          if (yearAsArray[j] && slot[0] != -1 && slot[1] == -1) {
+            slot[1] = j - 1;
+            slots.push([slot[0], slot[1], slot[1] - slot[0]]);
+            slot = [-1, -1];
+          }
+        }
+        if (slot[0] != -1 && slot[1] == -1) {
+          slot[1] = yearAsArray.length - 1;
+          slots.push(slot.slice());
         }
 
-        function daysIntoYear(date) {
-            return (Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) - Date.UTC(date.getFullYear(), 0, 0)) / 24 / 60 / 60 / 1000;
+        // Sort pairs
+        slots.sort(function (a, b) { return a[2] - b[2]; });
+
+        //get first "smaller"
+        const smallestSlot = slots[0];
+        // get last day of such slot
+        const bestDay = smallestSlot[1];
+        // add to allocations
+        allocations.push(bestDay);
+        // set into yearsAsArray
+        yearAsArray[bestDay] = true;
+      }
+      return allocations;
+    }
+
+    function best(year, publicHolidays, leaveDays) {
+      // convert publicHolidays to dates
+      // create array year
+      const totDays = daysInYear(year);
+      const yearAsArray = new Array(totDays).fill(false);
+      // set all saturdays and sundays
+      for (let i = 0; i < yearAsArray.length; i++) {
+        const dateOfYear = dateFromDay(year, i + 1);
+        if (dateOfYear.getDay() == 0 || dateOfYear.getDay() == 6) {   //if Sunday or Saturday
+          yearAsArray[i] = true;
         }
+      }
+      // set all publicHolidays
+      for (const day of publicHolidays) {
+        const dayIndex = daysIntoYear(day) - 1;
+        //console.log(`Public holiday ${day} is index ${dayIndex}`);
+        yearAsArray[dayIndex] = true;
+      }
 
-        function dateFromDay(year, day) {
-            const date = new Date(year, 0);
-            return new Date(date.setDate(day));
-        }
+      // fill best spots one by one
+      const bestDays = allocate(yearAsArray, leaveDays);
+      // Sort best days
+      bestDays.sort(function (a, b) { return a - b; });
+      //console.log(`Best days allocation: ${bestDays}`);
 
-        function findBestDays() {
-            const countrySelection = document.getElementById("countries");
-            const country = obj.holidaysPerCountry[countrySelection.value];
+      // get list of dates from spots
+      const bestHolidays = [];
+      for (const day of bestDays) {
+        const date = dateFromDay(year, day + 1);
+        bestHolidays.push(date);
+      }
+      return bestHolidays;
+    }
 
-            const yearsDropdown = document.getElementById("years");
-            const year = country.years[yearsDropdown.value];
+    function openYear() {
+      const countrySelection = document.getElementById("countries");
+      const country = obj.holidaysPerCountry[countrySelection.value];
 
-            const leavedaysInput = document.getElementById("leavedays");
+      console.log(`Selected country: ${country.country}`);
+      const yearsDropdown = document.getElementById("years");
+      yearsDropdown.innerHTML = '<option value="-1">--</option>';
+      for (let i = 0; i < country.years.length; i++) {
+        let opt = document.createElement('option');
+        opt.value = i;
+        opt.innerHTML = country.years[i].year;
+        yearsDropdown.appendChild(opt);
+      }
+    }
 
-            let publicHolidaysDates = [];
-            for(const publicHoliday of year.publicHolidays){
-                const datePublicHoliday = new Date(publicHoliday.day);
-                publicHolidaysDates.push(datePublicHoliday);
-            }
-            const bestHolidays = best(year.year, publicHolidaysDates, leavedaysInput.value);
+    const holidaysPerCountry = '{"holidaysPerCountry":[{"country":"Italy","years":[{"year":2021,"publicHolidays":[{"day":"2021-01-01","description_en":"New Year Day"},{"day":"2021-01-06","description_en":"Epiphany"},{"day":"2021-04-04","description_en":"Easter Sunday"},{"day":"2021-04-05","description_en":"Easter Monday"},{"day":"2021-04-25","description_en":"Liberation Day"},{"day":"2021-05-01","description_en":"International Workers Day"},{"day":"2021-06-02","description_en":"Republic Day"},{"day":"2021-08-15","description_en":"Assumption Day"},{"day":"2021-11-01","description_en":"All Saints Day"},{"day":"2021-12-08","description_en":"Immaculate Conception"},{"day":"2021-12-25","description_en":"Christmas Day"},{"day":"2021-12-26","description_en":"St Stephen Day"}]},{"year":2022,"publicHolidays":[{"day":"2022-01-01","description_en":"New Year Day"},{"day":"2022-01-06","description_en":"Epiphany"},{"day":"2022-04-17","description_en":"Easter Sunday"},{"day":"2022-04-18","description_en":"Easter Monday"},{"day":"2022-04-25","description_en":"Liberation Day"},{"day":"2022-05-01","description_en":"International Workers Day"},{"day":"2022-06-02","description_en":"Republic Day"},{"day":"2022-08-15","description_en":"Assumption Day, Ferragosto"},{"day":"2022-11-01","description_en":"All Saints Day"},{"day":"2022-12-08","description_en":"Immaculate Conception"},{"day":"2022-12-25","description_en":"Christmas Day"},{"day":"2022-12-26","description_en":"St Stephen Day"}]}]},{"country":"Taiwan","years":[{"year":2022,"publicHolidays":[{"day":"2022-01-01","description_en":"New Years Day"},{"day":"2022-01-29","description_en":"Chinese New Year"},{"day":"2022-01-30","description_en":"Chinese New Year"},{"day":"2022-01-31","description_en":"Chinese New Year"},{"day":"2022-02-01","description_en":"Chinese New Year"},{"day":"2022-02-02","description_en":"Chinese New Year"},{"day":"2022-02-03","description_en":"Chinese New Year"},{"day":"2022-02-04","description_en":"Chinese New Year"},{"day":"2022-02-05","description_en":"Chinese New Year"},{"day":"2022-02-06","description_en":"Chinese New Year"},{"day":"2022-02-28","description_en":"Peace Memorial Day"},{"day":"2022-04-04","description_en":"Children Day"},{"day":"2022-04-05","description_en":"Qingming Festival"},{"day":"2022-05-02","description_en":"Labour Day"},{"day":"2022-06-03","description_en":"Dragon Boat Festival"},{"day":"2022-09-10","description_en":"Mid-Autumn Festival"},{"day":"2022-10-10","description_en":"National Day"}]}]}]}';
+    const obj = JSON.parse(holidaysPerCountry);
 
-            // print bestholidays
-            const resultDiv = document.getElementById("result");
-            resultDiv.innerHTML = '';
-            for(const day of bestHolidays){
-                const formattedDate = day.toLocaleString('default', { weekday: 'long', year:'numeric',month: 'long',day:'numeric'});
-                resultDiv.innerHTML+=`<p>${formattedDate}</p>`;
-            }
-        }
+    const countriesDropdown = document.getElementById("countries");
+    countriesDropdown.innerHTML = '<option value="-1">--</option>';
+    for (let i = 0; i < obj.holidaysPerCountry.length; i++) {
+      let opt = document.createElement('option');
+      opt.value = i;
+      opt.innerHTML = obj.holidaysPerCountry[i].country;
+      countriesDropdown.appendChild(opt);
+    }
+  </script>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-NYVQZZ4CJD"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
 
-        function allocate(yearAsArray, leaveDays){
-            const allocations = [];
-            for(let i = 0; i<leaveDays; i++){
-                let slots = [];
-                let slot = [-1,-1];
-                for(let j = 0; j < yearAsArray.length; j++){
-                    if(!yearAsArray[j] && slot[0]==-1){
-                        slot[0]=j;
-                    }
-                    if(yearAsArray[j] && slot[0]!=-1 && slot[1]==-1){
-                        slot[1]=j-1;
-                        slots.push([slot[0],slot[1],slot[1]-slot[0]]);
-                        slot = [-1,-1];
-                    }
-                }
-                if(slot[0]!=-1 && slot[1]==-1){
-                    slot[1] = yearAsArray.length-1;
-                    slots.push(slot.slice());
-                }
-                
-                // Sort pairs
-                slots.sort(function (a, b) { return a[2] - b[2]; });
-                
-                //get first "smaller"
-                const smallestSlot = slots[0];
-                // get last day of such slot
-                const bestDay = smallestSlot[1];
-                // add to allocations
-                allocations.push(bestDay);
-                // set into yearsAsArray
-                yearAsArray[bestDay]=true;
-            }
-            return allocations;
-        }
-
-        function best(year, publicHolidays, leaveDays) {
-            // convert publicHolidays to dates
-            // create array year
-            const totDays = daysInYear(year);
-            const yearAsArray = new Array(totDays).fill(false);
-            // set all saturdays and sundays
-            for (let i = 0; i < yearAsArray.length; i++) {
-                const dateOfYear = dateFromDay(year, i+1);
-                if (dateOfYear.getDay() == 0 || dateOfYear.getDay() == 6) {   //if Sunday or Saturday
-                    yearAsArray[i] = true;
-                }
-            }
-            // set all publicHolidays
-            for (const day of publicHolidays) {
-                const dayIndex = daysIntoYear(day)-1;
-                //console.log(`Public holiday ${day} is index ${dayIndex}`);
-                yearAsArray[dayIndex] = true;
-            }
-            
-            // fill best spots one by one
-            const bestDays = allocate(yearAsArray, leaveDays); 
-            // Sort best days
-            bestDays.sort(function(a, b) {return a - b;});
-            //console.log(`Best days allocation: ${bestDays}`);
-
-            // get list of dates from spots
-            const bestHolidays = [];
-            for(const day of bestDays){
-                const date = dateFromDay(year, day+1);
-                bestHolidays.push(date);
-            }
-            return bestHolidays;
-        }
-
-        function openYear() {
-            const countrySelection = document.getElementById("countries");
-            const country = obj.holidaysPerCountry[countrySelection.value];
-
-            console.log(`Selected country: ${country.country}`);
-            const yearsDropdown = document.getElementById("years");
-            yearsDropdown.innerHTML = '<option value="-1">--</option>';
-            for (let i = 0; i < country.years.length; i++) {
-                let opt = document.createElement('option');
-                opt.value = i;
-                opt.innerHTML = country.years[i].year;
-                yearsDropdown.appendChild(opt);
-            }
-        }
-
-        const holidaysPerCountry = '{"holidaysPerCountry":[{"country":"Italy","years":[{"year":2021,"publicHolidays":[{"day":"2021-01-01","description_en":"New Year Day"},{"day":"2021-01-06","description_en":"Epiphany"},{"day":"2021-04-04","description_en":"Easter Sunday"},{"day":"2021-04-05","description_en":"Easter Monday"},{"day":"2021-04-25","description_en":"Liberation Day"},{"day":"2021-05-01","description_en":"International Workers Day"},{"day":"2021-06-02","description_en":"Republic Day"},{"day":"2021-08-15","description_en":"Assumption Day"},{"day":"2021-11-01","description_en":"All Saints Day"},{"day":"2021-12-08","description_en":"Immaculate Conception"},{"day":"2021-12-25","description_en":"Christmas Day"},{"day":"2021-12-26","description_en":"St Stephen Day"}]},{"year":2022,"publicHolidays":[{"day":"2022-01-01","description_en":"New Year Day"},{"day":"2022-01-06","description_en":"Epiphany"},{"day":"2022-04-17","description_en":"Easter Sunday"},{"day":"2022-04-18","description_en":"Easter Monday"},{"day":"2022-04-25","description_en":"Liberation Day"},{"day":"2022-05-01","description_en":"International Workers Day"},{"day":"2022-06-02","description_en":"Republic Day"},{"day":"2022-08-15","description_en":"Assumption Day, Ferragosto"},{"day":"2022-11-01","description_en":"All Saints Day"},{"day":"2022-12-08","description_en":"Immaculate Conception"},{"day":"2022-12-25","description_en":"Christmas Day"},{"day":"2022-12-26","description_en":"St Stephen Day"}]}]},{"country":"Taiwan","years":[{"year":2022,"publicHolidays":[{"day":"2022-01-01","description_en":"New Years Day"},{"day":"2022-01-29","description_en":"Chinese New Year"},{"day":"2022-01-30","description_en":"Chinese New Year"},{"day":"2022-01-31","description_en":"Chinese New Year"},{"day":"2022-02-01","description_en":"Chinese New Year"},{"day":"2022-02-02","description_en":"Chinese New Year"},{"day":"2022-02-03","description_en":"Chinese New Year"},{"day":"2022-02-04","description_en":"Chinese New Year"},{"day":"2022-02-05","description_en":"Chinese New Year"},{"day":"2022-02-06","description_en":"Chinese New Year"},{"day":"2022-02-28","description_en":"Peace Memorial Day"},{"day":"2022-04-04","description_en":"Children Day"},{"day":"2022-04-05","description_en":"Qingming Festival"},{"day":"2022-05-02","description_en":"Labour Day"},{"day":"2022-06-03","description_en":"Dragon Boat Festival"},{"day":"2022-09-10","description_en":"Mid-Autumn Festival"},{"day":"2022-10-10","description_en":"National Day"}]}]}]}';
-        const obj = JSON.parse(holidaysPerCountry);
-
-        const countriesDropdown = document.getElementById("countries");
-        countriesDropdown.innerHTML = '<option value="-1">--</option>';
-        for (let i = 0; i < obj.holidaysPerCountry.length; i++) {
-            let opt = document.createElement('option');
-            opt.value = i;
-            opt.innerHTML = obj.holidaysPerCountry[i].country;
-            countriesDropdown.appendChild(opt);
-        }
-    </script>
+    gtag('config', 'G-NYVQZZ4CJD');
+  </script>
 
 </body>
 
