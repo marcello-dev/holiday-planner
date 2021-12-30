@@ -4,16 +4,16 @@
 <body>
 
   <!-- <h2>Holiday planner</h2> -->
-  <h2>Calcola ferie</h2>
+  <h1>Calcola ferie</h1>
 
   <!-- <label for="countries">Select a country:</label> -->
-  <label for="countries">Seleziona nazione:</label>
+  <label for="countries" style="font-size: 20px;">Nazione:</label>
   <select name="countries" id="countries" onchange="if (this.selectedIndex) openYear();">
   </select>
 
   <br><br>
   <!-- <label for="years">Select a year:</label> -->
-  <label for="years">Seleziona anno:</label>
+  <label for="years" style="font-size: 20px;">Anno:</label>
   <select name="years" id="years">
     <option value="-1">--</option>
   </select>
@@ -21,16 +21,16 @@
   <br><br>
 
   <!-- <label for="leavedays">Enter leave days:</label> -->
-  <label for="leavedays">Giorni di ferie disponibili:</label>
+  <label for="leavedays" style="font-size: 20px;">Giorni di ferie disponibili:</label>
   <input type="number" id="leavedays" name="leavedays">
 
   <br><br>
   <!-- <input type="button" id="calculate" value="Calculate" onclick="findBestDays()"> -->
-  <input type="button" id="calculate" value="Calcola" onclick="findBestDays()">
+  <input type="button" id="calculate" style="font-size: 20px;" value="Calcola" onclick="findBestDays()">
 
   <hr>
 
-  <h4>Migliori possibilita':</h4>
+  <h2>Migliori possibilita':</h2>
   <div id="result"></div>
 
   <script>
@@ -68,7 +68,7 @@
       resultDiv.innerHTML = '';
       for (const day of bestHolidays) {
         const formattedDate = day.toLocaleString('default', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-        resultDiv.innerHTML += `<p>${formattedDate}</p>`;
+        resultDiv.innerHTML += `<p style="font-size: 20px;">${formattedDate}</p>`;
       }
     }
 
