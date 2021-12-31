@@ -120,17 +120,17 @@
           const divCol = document.createElement('div');
           divCol.className = 'col border';
           if(dates.some((leaveDay) => leaveDay.getDate()-1 === i)){
-              divCol.className += ' bg-danger';
+              divCol.className += ' bg-danger text-white';
           }
           const currentDay = new Date(year.year, month.getMonth(), i+1);
           if (currentDay.getDay() == 0 || currentDay.getDay() == 6) {   //if Sunday or Saturday
-              divCol.style.color = 'blue';
+              divCol.style.color = ' bg-primary text-white';
           }
           console.log(`cur day: ${currentDay.toISOString()}`);
           //publicHolidaysDates.forEach(day => console.log(day.toISOString()));
           //console.log('end');
           if(publicHolidaysDates.some((publicDay) => publicDay.getMonth() == currentDay.getMonth() && currentDay.getDate() == publicDay.getDate()  )){
-              divCol.style.color = 'green';
+              divCol.style.color = ' bg-success text-white';
           }
           divCol.appendChild(document.createTextNode(i+1));
           divRow.appendChild(divCol);
