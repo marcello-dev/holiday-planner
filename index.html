@@ -120,7 +120,7 @@
           const divCol = document.createElement('div');
           divCol.className = 'col border';
           if(dates.some((leaveDay) => leaveDay.getDate()-1 === i)){
-              divCol.style.color = 'red';
+              divCol.className += 'bg-danger';
           }
           const currentDay = new Date(year.year, month.getMonth(), i+1);
           if (currentDay.getDay() == 0 || currentDay.getDay() == 6) {   //if Sunday or Saturday
