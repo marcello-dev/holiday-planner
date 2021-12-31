@@ -115,7 +115,7 @@
         const divRow = document.createElement('div');
         divRow.className = "row";
         resultDiv.appendChild(divRow);
-        for (let i = 0; i < daysInMonth(month.getMonth(),year.year); i++) {
+        for (let i = 0; i < daysInMonth(month.getMonth()+1,year.year); i++) {
           
           const divCol = document.createElement('div');
           divCol.className = 'col-sm border';
