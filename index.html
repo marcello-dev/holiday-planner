@@ -118,7 +118,7 @@
         for (let i = 0; i < daysInMonth(month.getMonth()+1,year.year); i++) {
           
           const divCol = document.createElement('div');
-          divCol.className = 'border';
+          divCol.className = 'col border';
           if(dates.some((leaveDay) => leaveDay.getDate()-1 === i)){
               divCol.style.color = 'red';
           }
