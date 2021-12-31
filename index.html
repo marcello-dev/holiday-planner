@@ -124,13 +124,12 @@
           }
           const currentDay = new Date(year.year, month.getMonth(), i+1);
           if (currentDay.getDay() == 0 || currentDay.getDay() == 6) {   //if Sunday or Saturday
-              divCol.style.color = ' bg-primary text-white';
+              divCol.className = ' bg-primary text-white';
           }
           console.log(`cur day: ${currentDay.toISOString()}`);
-          //publicHolidaysDates.forEach(day => console.log(day.toISOString()));
-          //console.log('end');
+          
           if(publicHolidaysDates.some((publicDay) => publicDay.getMonth() == currentDay.getMonth() && currentDay.getDate() == publicDay.getDate()  )){
-              divCol.style.color = ' bg-success text-white';
+              divCol.className = ' bg-success text-white';
           }
           divCol.appendChild(document.createTextNode(i+1));
           divRow.appendChild(divCol);
