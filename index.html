@@ -101,8 +101,8 @@
       resultDiv.innerHTML = '';
       for (const [monthIndex, dates] of groupedHolidays.entries()) {
         const month = new Date(year.year, monthIndex, 1);
-        resultDiv.innerHTML += `<p class="font-weight-bold">${month.toLocaleString('default', {month: 'long'})}</p>`;
-        
+        resultDiv.innerHTML += `<p class="font-weight-bold">${month.toLocaleString('default', { month: 'long' })}</p>`;
+
         const ul = document.createElement('ul');
         resultDiv.appendChild(ul);
         for (const day of dates) {
@@ -112,27 +112,40 @@
           ul.appendChild(li);
         }
         console.log(`cur month: ${month}`);
-        const divRow = document.createElement('div');
-        divRow.className = "row";
-        resultDiv.appendChild(divRow);
-        for (let i = 0; i < daysInMonth(month.getMonth()+1,year.year); i++) {
-          
+        let divRow = null;
+        for (let i = 0; i < daysInMonth(month.getMonth() + 1, year.year); i++) {
+          if (i % 7 == 0) {
+            if (divRow != null) {
+              resultDiv.appendChild(divRow);
+            }
+            divRow = document.createElement('div');
+            divRow.className = "row";
+          }
           const divCol = document.createElement('div');
           divCol.className = 'col border';
-          if(dates.some((leaveDay) => leaveDay.getDate()-1 === i)){
-              divCol.className += ' bg-danger text-white';
+          if (dates.some((leaveDay) => leaveDay.getDate() - 1 === i)) {
+            divCol.className += ' bg-danger text-white';
           }
-          const currentDay = new Date(year.year, month.getMonth(), i+1);
+          const currentDay = new Date(year.year, month.getMonth(), i + 1);
           if (currentDay.getDay() == 0 || currentDay.getDay() == 6) {   //if Sunday or Saturday
-              divCol.className += ' bg-primary text-white';
+            divCol.className += ' bg-primary text-white';
           }
-          console.log(`cur day: ${currentDay.toISOString()}`);
-          
-          if(publicHolidaysDates.some((publicDay) => publicDay.getMonth() == currentDay.getMonth() && currentDay.getDate() == publicDay.getDate()  )){
-              divCol.className += ' bg-success text-white';
+
+          if (publicHolidaysDates.some((publicDay) => publicDay.getMonth() == currentDay.getMonth() && currentDay.getDate() == publicDay.getDate())) {
+            divCol.className += ' bg-success text-white';
           }
-          divCol.appendChild(document.createTextNode(i+1));
+          divCol.appendChild(document.createTextNode(i + 1));
           divRow.appendChild(divCol);
+        }
+        console.log(`has ${divRow.hasChildNodes()}`);
+        if (divRow.hasChildNodes()) {
+          const remaining = 7 - divRow.childNodes.length;
+          for(let i = 0; i < remaining; i++){
+            const divCol = document.createElement('div');
+            divCol.className = 'col border-0';
+            divRow.appendChild(divCol);
+          }
+          resultDiv.appendChild(divRow);
         }
       }
       const br = document.createElement('br');
@@ -140,7 +153,7 @@
     }
 
     function daysInMonth(month, year) {
-        return new Date(year, month, 0).getDate();
+      return new Date(year, month, 0).getDate();
     }
 
     function allocate(yearAsArray, leaveDays) {
