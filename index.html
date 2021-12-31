@@ -129,7 +129,7 @@
           console.log(`cur day: ${currentDay.toISOString()}`);
           //publicHolidaysDates.forEach(day => console.log(day.toISOString()));
           //console.log('end');
-          if(publicHolidaysDates.some((publicDay) => publicDay.getTime() === currentDay.getTime())){
+          if(publicHolidaysDates.some((publicDay) => publicDay.getMonth() == currentDay.getMonth() && currentDay.getDate() == publicDay.getDate()  )){
               divCol.style.color = 'green';
           }
           divCol.appendChild(document.createTextNode(i+1));
