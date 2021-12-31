@@ -102,7 +102,7 @@
       for (const [monthIndex, dates] of groupedHolidays.entries()) {
         const month = new Date(year.year, monthIndex, 1);
         resultDiv.innerHTML += `<p class="font-weight-bold">${month.toLocaleString('default', {month: 'long'})}</p>`;
-        resultDiv.innerHTML += '<ul>';
+        
         const ul = document.createElement('ul');
         resultDiv.appendChild(ul);
         for (const day of dates) {
