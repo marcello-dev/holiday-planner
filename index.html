@@ -65,6 +65,20 @@
       return new Date(date.setDate(day));
     }
 
+    function groupBy(list, keyGetter) {
+      const map = new Map();
+      list.forEach((item) => {
+        const key = keyGetter(item);
+        const collection = map.get(key);
+        if (!collection) {
+          map.set(key, [item]);
+        } else {
+          collection.push(item);
+        }
+      });
+      return map;
+    }
+
     function findBestDays() {
       const countrySelection = document.getElementById("countries");
       const country = obj.holidaysPerCountry[countrySelection.value];
@@ -80,14 +94,52 @@
         publicHolidaysDates.push(datePublicHoliday);
       }
       const bestHolidays = best(year.year, publicHolidaysDates, leavedaysInput.value);
+      const groupedHolidays = groupBy(bestHolidays, date => date.getMonth());
 
       // print bestholidays
       const resultDiv = document.getElementById("result");
       resultDiv.innerHTML = '';
-      for (const day of bestHolidays) {
-        const formattedDate = day.toLocaleString('default', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-        resultDiv.innerHTML += `<p>${formattedDate}</p>`;
+      for (const [monthIndex, dates] of groupedHolidays.entries()) {
+        const month = new Date(year.year, monthIndex, 1);
+        resultDiv.innerHTML += `<p class="font-weight-bold">${month.toLocaleString('default', {month: 'long'})}</p>`;
+        resultDiv.innerHTML += '<ul>';
+        const ul = document.createElement('ul');
+        resultDiv.appendChild(ul);
+        for (const day of dates) {
+          const formattedDate = day.toLocaleString('default', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+          const li = document.createElement('li');
+          li.appendChild(document.createTextNode(formattedDate));
+          ul.appendChild(li);
+        }
+        console.log(`cur month: ${month}`);
+        const divRow = document.createElement('div');
+        divRow.className = "row";
+        resultDiv.appendChild(divRow);
+        for (let i = 0; i < daysInMonth(month.getMonth(),year.year); i++) {
+          
+          const divCol = document.createElement('div');
+          divCol.className = 'col-sm border';
+          if(dates.some((leaveDay) => leaveDay.getDate()-1 === i)){
+              divCol.style.color = 'red';
+          }
+          const currentDay = new Date(year.year, month.getMonth()+1, i+1);
+          if (currentDay.getDay() == 0 || currentDay.getDay() == 6) {   //if Sunday or Saturday
+              divCol.style.color = 'blue';
+          }
+          console.log(`cur day: ${currentDay.toISOString()}`);
+          //publicHolidaysDates.forEach(day => console.log(day.toISOString()));
+          //console.log('end');
+          if(publicHolidaysDates.some((publicDay) => publicDay.getTime() === currentDay.getTime())){
+              divCol.style.color = 'green';
+          }
+          divCol.appendChild(document.createTextNode(i+1));
+          divRow.appendChild(divCol);
+        }
       }
+    }
+
+    function daysInMonth(month, year) {
+        return new Date(year, month, 0).getDate();
     }
 
     function allocate(yearAsArray, leaveDays) {
@@ -190,11 +242,11 @@
 
       var forms = document.getElementsByClassName('needs-validation');
       // Loop over them and prevent submission
-      var validation = Array.prototype.filter.call(forms, function(form) {
-        form.addEventListener('submit', function(event) {
+      var validation = Array.prototype.filter.call(forms, function (form) {
+        form.addEventListener('submit', function (event) {
           event.preventDefault();
           if (form.checkValidity() === false) {
-              event.stopPropagation();
+            event.stopPropagation();
           }
           else {
             findBestDays();
@@ -215,4 +267,5 @@
     gtag('config', 'G-NYVQZZ4CJD');
   </script>
 </body>
+
 </html>
