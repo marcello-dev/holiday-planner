@@ -24,7 +24,7 @@
 <body>
   <div class="container">
     <!-- <h1>Holiday planner</h1> -->
-    <h1>Calcola ferie</h1>
+    <h1>Alloca ferie</h1>
 
     <form class="needs-validation" novalidate>
       <div class="form-group">
@@ -41,7 +41,7 @@
         <label for="leavedays">Giorni di ferie disponibili</label>
         <input type="number" class="form-control" id="leavedays" min="1" max="365" required>
       </div>
-      <p>Working days:</p>
+      <p>Giorni lavorativi:</p>
       <div class="form-check">
         <input class="form-check-input" type="checkbox" value="" id="monday" checked>
         <label class="form-check-label" for="monday">
@@ -85,7 +85,7 @@
         </label>
       </div>
       <br>
-      <button type="submit" id="calculate" class="btn btn-primary">Calcola</button>
+      <button type="submit" id="calculate" class="btn btn-primary">Alloca</button>
     </form>
 
     <hr>
@@ -258,10 +258,9 @@
           slots.push(slot.slice());
         }
 
-        // Sort pairs
         slots.sort(function (a, b) { return a[2] - b[2]; });
 
-        //get first "smaller"
+        //get first "smallest"
         const smallestSlot = slots[0];
         // get last day of such slot
         const bestDay = smallestSlot[1];
@@ -274,14 +273,24 @@
     }
 
     function best(year, publicHolidays, leaveDays) {
-      // convert publicHolidays to dates
-      // create array year
       const totDays = daysInYear(year);
       const yearAsArray = new Array(totDays).fill(false);
-      // set all saturdays and sundays
+      // set all working days
       for (let i = 0; i < yearAsArray.length; i++) {
         const dateOfYear = dateFromDay(year, i + 1);
-        if (dateOfYear.getDay() == 0 || dateOfYear.getDay() == 6) {   //if Sunday or Saturday
+        if (dateOfYear.getDay() == 0 && document.getElementById("sunday").checked == false) {
+          yearAsArray[i] = true;
+        } else if (dateOfYear.getDay() == 1 && document.getElementById("monday").checked == false) {
+          yearAsArray[i] = true;
+        } else if (dateOfYear.getDay() == 2 && document.getElementById("tuesday").checked == false) {
+          yearAsArray[i] = true;
+        } else if (dateOfYear.getDay() == 3 && document.getElementById("wednesday").checked == false) {
+          yearAsArray[i] = true;
+        } else if (dateOfYear.getDay() == 4 && document.getElementById("thursday").checked == false) {
+          yearAsArray[i] = true;
+        } else if (dateOfYear.getDay() == 5 && document.getElementById("friday").checked == false) {
+          yearAsArray[i] = true;
+        } else if (dateOfYear.getDay() == 6 && document.getElementById("saturday").checked == false) {
           yearAsArray[i] = true;
         }
       }

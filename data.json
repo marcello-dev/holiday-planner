@@ -81,31 +81,31 @@
             },
             {
               "day": "2022-05-01",
-              "description": "International Workers Day"
+              "description": "Festa del lavoro (International Workers Day)"
             },
             {
               "day": "2022-06-02",
-              "description": "Republic Day"
+              "description": "Giorno della Repubblica (Republic's Day)"
             },
             {
               "day": "2022-08-15",
-              "description": "Assumption Day, Ferragosto"
+              "description": "Ferragosto (Assumption Day)"
             },
             {
               "day": "2022-11-01",
-              "description": "All Saints Day"
+              "description": "Tutti i Santi (All Saints Day)"
             },
             {
               "day": "2022-12-08",
-              "description": "Immaculate Conception"
+              "description": "Immacolata (Immaculate Conception)"
             },
             {
               "day": "2022-12-25",
-              "description": "Christmas Day"
+              "description": "Natale (Christmas Day)"
             },
             {
               "day": "2022-12-26",
-              "description": "St Stephen Day"
+              "description": "Santo Stefano (St Stephen Day)"
             }
           ]
         }
@@ -119,7 +119,7 @@
           "publicHolidays": [
             {
               "day": "2022-01-01",
-              "description": "New Years Day"
+              "description": "New Year's Day"
             },
             {
               "day": "2022-01-29",
