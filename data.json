@@ -61,23 +61,23 @@
           "publicHolidays": [
             {
               "day": "2022-01-01",
-              "description": "New Year Day"
+              "description": "Capodanno (New Year Day)"
             },
             {
               "day": "2022-01-06",
-              "description": "Epiphany"
+              "description": "Epifania (Epiphany)"
             },
             {
               "day": "2022-04-17",
-              "description": "Easter Sunday"
+              "description": "Pasqua (Easter Sunday)"
             },
             {
               "day": "2022-04-18",
-              "description": "Easter Monday"
+              "description": "Pasquetta (Easter Monday)"
             },
             {
               "day": "2022-04-25",
-              "description": "Liberation Day"
+              "description": "Liberazione (Liberation's Day)"
             },
             {
               "day": "2022-05-01",
