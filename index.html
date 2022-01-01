@@ -90,7 +90,7 @@
     </form>
 
     <hr>
-
+    <!-- <a href="javascript:;" onclick="clickPublicHoliday();"><h2>Migliori possibilitaaaaaaaaaaa</h2></a> -->
     <h2>Migliori possibilita':</h2>
     <div id="result"></div>
 
@@ -145,8 +145,7 @@
       resultDiv.innerHTML = '';
       for (const [monthIndex, dates] of groupedHolidays.entries()) {
         const month = new Date(year.year, monthIndex, 1);
-        resultDiv.innerHTML += `<p class="font-weight-bold">${month.toLocaleString('default', { month: 'long' })}</p>`;
-
+        resultDiv.innerHTML += `<br><p class="font-weight-bold">${month.toLocaleString('default', { month: 'long' })}</p>`;
         const ul = document.createElement('ul');
         resultDiv.appendChild(ul);
         for (const day of dates) {
@@ -190,9 +189,9 @@
           }
 
           if (publicHolidaysDates.some((publicDay) => publicDay.getMonth() == currentDay.getMonth() && currentDay.getDate() == publicDay.getDate())) {
-            divCol.className += ' bg-success text-white';
-            divCol.setAttribute("data-toggle", "tooltip");
-            divCol.setAttribute("data-placement", "top");
+            divCol.className = 'col border';
+            // light green
+            divCol.style.backgroundColor = 'rgb(162, 235, 164)';
             const publicHoliday = publicHolidaysDates.find((publicDay) => publicDay.getMonth() == currentDay.getMonth() && currentDay.getDate() == publicDay.getDate());
             let descEn = "";
             for (const publicHolidayJson of year.publicHolidays) {
@@ -201,12 +200,22 @@
                 descEn = publicHolidayJson.description_en;
               } 
             }
-            divCol.setAttribute("title",descEn);
+            const a = document.createElement('a');
+            a.href='javascript:;';
+            a.setAttribute("data-toggle", "tooltip");
+            a.setAttribute("data-placement", "top");
+            a.setAttribute("title",descEn);
+            a.appendChild(document.createTextNode(i + 1));
+            divCol.appendChild(a);
+            divRow.appendChild(divCol);
+            continue;
           }
+
           divCol.appendChild(document.createTextNode(i + 1));
           divRow.appendChild(divCol);
         }
-
+        // enable tooltips just created
+        $('[data-toggle="tooltip"]').tooltip();
         if (divRow.hasChildNodes()) {
           const remaining = 7 - divRow.childNodes.length;
           for(let i = 0; i < remaining; i++){
