@@ -24,7 +24,9 @@
 <body>
   <div class="container">
     <!-- <h1>Holiday planner</h1> -->
+    <br>
     <h1>Alloca ferie</h1>
+    <p>Alloca le ferie in modo ottimale massimizando il numero di giorni consecutivi e considerando le fesività.</p>
 
     <form class="needs-validation" novalidate>
       <div class="form-group">
@@ -90,10 +92,16 @@
 
     <hr>
     <!-- <a href="javascript:;" onclick="clickPublicHoliday();"><h2>Migliori possibilitaaaaaaaaaaa</h2></a> -->
-    <h2>Migliori possibilita':</h2>
+    <h2>Migliori possibilità:</h2>
     <div id="result"></div>
 
   </div>
+
+  <footer class="footer mt-auto py-3">
+    <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+      © 2021 Copyright: <a href="https://marcello-dev.github.io/">Marcello Monachesi</a>
+    </div>
+  </footer>
   <script>
     function daysInYear(year) {
       return ((year % 4 === 0 && year % 100 > 0) || year % 400 == 0) ? 366 : 365;
