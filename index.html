@@ -74,19 +74,19 @@
         </label>
       </div>
       <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="" id="saturday" >
+        <input class="form-check-input" type="checkbox" value="" id="saturday">
         <label class="form-check-label" for="saturday">
           Saturday
         </label>
       </div>
       <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="" id="sunday" >
+        <input class="form-check-input" type="checkbox" value="" id="sunday">
         <label class="form-check-label" for="sunday">
           Sunday
         </label>
       </div>
       <br>
-      <button type="submit" id="calculate" class="btn btn-primary" >Calcola</button>
+      <button type="submit" id="calculate" class="btn btn-primary">Calcola</button>
     </form>
 
     <hr>
@@ -125,7 +125,7 @@
 
     function findBestDays() {
       const countrySelection = document.getElementById("countries");
-      const country = obj.holidaysPerCountry[countrySelection.value];
+      const country = data.holidaysPerCountry[countrySelection.value];
 
       const yearsDropdown = document.getElementById("years");
       const year = country.years[yearsDropdown.value];
@@ -176,14 +176,14 @@
           const currentDay = new Date(year.year, month.getMonth(), i + 1);
 
           // Set header text
-          const shortWeekDay = currentDay.toLocaleString('default', {  weekday: 'short' });
+          const shortWeekDay = currentDay.toLocaleString('default', { weekday: 'short' });
           divColHeader.appendChild(document.createTextNode(shortWeekDay.substring(0, 2)));
           divRowHeader.appendChild(divColHeader);
 
           if (dates.some((leaveDay) => leaveDay.getDate() - 1 === i)) {
             divCol.className += ' bg-danger text-white';
           }
-          
+
           if (currentDay.getDay() == 0 || currentDay.getDay() == 6) {   //if Sunday or Saturday
             divCol.className += ' bg-primary text-white';
           }
@@ -196,15 +196,15 @@
             let descEn = "";
             for (const publicHolidayJson of year.publicHolidays) {
               const datePublicHoliday = new Date(publicHolidayJson.day);
-              if(datePublicHoliday.getMonth() == publicHoliday.getMonth() && datePublicHoliday.getDate() == publicHoliday.getDate()){
-                descEn = publicHolidayJson.description_en;
-              } 
+              if (datePublicHoliday.getMonth() == publicHoliday.getMonth() && datePublicHoliday.getDate() == publicHoliday.getDate()) {
+                descEn = publicHolidayJson.description;
+              }
             }
             const a = document.createElement('a');
-            a.href='javascript:;';
+            a.href = 'javascript:;';
             a.setAttribute("data-toggle", "tooltip");
             a.setAttribute("data-placement", "top");
-            a.setAttribute("title",descEn);
+            a.setAttribute("title", descEn);
             a.appendChild(document.createTextNode(i + 1));
             divCol.appendChild(a);
             divRow.appendChild(divCol);
@@ -218,7 +218,7 @@
         $('[data-toggle="tooltip"]').tooltip();
         if (divRow.hasChildNodes()) {
           const remaining = 7 - divRow.childNodes.length;
-          for(let i = 0; i < remaining; i++){
+          for (let i = 0; i < remaining; i++) {
             const divColHeader = document.createElement('div');
             divColHeader.className = 'col border-0';
             divRowHeader.appendChild(divColHeader);
@@ -310,7 +310,7 @@
 
     function fillYear() {
       const countrySelection = document.getElementById("countries");
-      const country = obj.holidaysPerCountry[countrySelection.value];
+      const country = data.holidaysPerCountry[countrySelection.value];
 
       const yearsDropdown = document.getElementById("years");
       yearsDropdown.innerHTML = '<option value="-1"></option>';
@@ -322,19 +322,22 @@
       }
     }
 
-    const holidaysPerCountry = '{"holidaysPerCountry":[{"country":"Italy","years":[{"year":2021,"publicHolidays":[{"day":"2021-01-01","description_en":"New Year Day"},{"day":"2021-01-06","description_en":"Epiphany"},{"day":"2021-04-04","description_en":"Easter Sunday"},{"day":"2021-04-05","description_en":"Easter Monday"},{"day":"2021-04-25","description_en":"Liberation Day"},{"day":"2021-05-01","description_en":"International Workers Day"},{"day":"2021-06-02","description_en":"Republic Day"},{"day":"2021-08-15","description_en":"Assumption Day"},{"day":"2021-11-01","description_en":"All Saints Day"},{"day":"2021-12-08","description_en":"Immaculate Conception"},{"day":"2021-12-25","description_en":"Christmas Day"},{"day":"2021-12-26","description_en":"St Stephen Day"}]},{"year":2022,"publicHolidays":[{"day":"2022-01-01","description_en":"New Year Day"},{"day":"2022-01-06","description_en":"Epiphany"},{"day":"2022-04-17","description_en":"Easter Sunday"},{"day":"2022-04-18","description_en":"Easter Monday"},{"day":"2022-04-25","description_en":"Liberation Day"},{"day":"2022-05-01","description_en":"International Workers Day"},{"day":"2022-06-02","description_en":"Republic Day"},{"day":"2022-08-15","description_en":"Assumption Day, Ferragosto"},{"day":"2022-11-01","description_en":"All Saints Day"},{"day":"2022-12-08","description_en":"Immaculate Conception"},{"day":"2022-12-25","description_en":"Christmas Day"},{"day":"2022-12-26","description_en":"St Stephen Day"}]}]},{"country":"Taiwan","years":[{"year":2022,"publicHolidays":[{"day":"2022-01-01","description_en":"New Years Day"},{"day":"2022-01-29","description_en":"Chinese New Year"},{"day":"2022-01-30","description_en":"Chinese New Year"},{"day":"2022-01-31","description_en":"Chinese New Year"},{"day":"2022-02-01","description_en":"Chinese New Year"},{"day":"2022-02-02","description_en":"Chinese New Year"},{"day":"2022-02-03","description_en":"Chinese New Year"},{"day":"2022-02-04","description_en":"Chinese New Year"},{"day":"2022-02-05","description_en":"Chinese New Year"},{"day":"2022-02-06","description_en":"Chinese New Year"},{"day":"2022-02-28","description_en":"Peace Memorial Day"},{"day":"2022-04-04","description_en":"Children Day"},{"day":"2022-04-05","description_en":"Qingming Festival"},{"day":"2022-05-02","description_en":"Labour Day"},{"day":"2022-06-03","description_en":"Dragon Boat Festival"},{"day":"2022-09-10","description_en":"Mid-Autumn Festival"},{"day":"2022-10-10","description_en":"National Day"}]}]}]}';
-    const obj = JSON.parse(holidaysPerCountry);
+    let data = null;
+
 
     $(document).ready(function () {
 
       $('[data-toggle="tooltip"]').tooltip();
+      $.getJSON('https://raw.githubusercontent.com/marcello-dev/holiday-planner/main/data.json', function (data) {
+        data = JSON.parse(data);
+      });
 
       const countriesDropdown = document.getElementById("countries");
       countriesDropdown.innerHTML = '<option value="-1"></option>';
-      for (let i = 0; i < obj.holidaysPerCountry.length; i++) {
+      for (let i = 0; i < data.holidaysPerCountry.length; i++) {
         let opt = document.createElement('option');
         opt.value = i;
-        opt.innerHTML = obj.holidaysPerCountry[i].country;
+        opt.innerHTML = data.holidaysPerCountry[i].country;
         countriesDropdown.appendChild(opt);
       }
 

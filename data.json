@@ -1,0 +1,193 @@
+{
+  "holidaysPerCountry": [
+    {
+      "country": "Italy",
+      "years": [
+        {
+          "year": 2021,
+          "publicHolidays": [
+            {
+              "day": "2021-01-01",
+              "description": "Capodanno (New Year Day)"
+            },
+            {
+              "day": "2021-01-06",
+              "description": "Epifania (Epiphany)"
+            },
+            {
+              "day": "2021-04-04",
+              "description": "Pasqua (Easter Sunday)"
+            },
+            {
+              "day": "2021-04-05",
+              "description": "Pasquetta (Easter Monday)"
+            },
+            {
+              "day": "2021-04-25",
+              "description": "Liberazione (Liberation Day)"
+            },
+            {
+              "day": "2021-05-01",
+              "description": "Festa del lavoro (International Workers Day)"
+            },
+            {
+              "day": "2021-06-02",
+              "description": "Giorno della Repubblica (Republic Day)"
+            },
+            {
+              "day": "2021-08-15",
+              "description": "Giorno dell Assunzione (Assumption Day)"
+            },
+            {
+              "day": "2021-11-01",
+              "description": "Tutti i Santi (All Saints Day)"
+            },
+            {
+              "day": "2021-12-08",
+              "description": "Immaculate Conception"
+            },
+            {
+              "day": "2021-12-25",
+              "description": "Natale (Christmas Day)"
+            },
+            {
+              "day": "2021-12-26",
+              "description": "Santo stefano (St Stephen Day)"
+            }
+          ]
+        },
+        {
+          "year": 2022,
+          "publicHolidays": [
+            {
+              "day": "2022-01-01",
+              "description": "New Year Day"
+            },
+            {
+              "day": "2022-01-06",
+              "description": "Epiphany"
+            },
+            {
+              "day": "2022-04-17",
+              "description": "Easter Sunday"
+            },
+            {
+              "day": "2022-04-18",
+              "description": "Easter Monday"
+            },
+            {
+              "day": "2022-04-25",
+              "description": "Liberation Day"
+            },
+            {
+              "day": "2022-05-01",
+              "description": "International Workers Day"
+            },
+            {
+              "day": "2022-06-02",
+              "description": "Republic Day"
+            },
+            {
+              "day": "2022-08-15",
+              "description": "Assumption Day, Ferragosto"
+            },
+            {
+              "day": "2022-11-01",
+              "description": "All Saints Day"
+            },
+            {
+              "day": "2022-12-08",
+              "description": "Immaculate Conception"
+            },
+            {
+              "day": "2022-12-25",
+              "description": "Christmas Day"
+            },
+            {
+              "day": "2022-12-26",
+              "description": "St Stephen Day"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "country": "Taiwan",
+      "years": [
+        {
+          "year": 2022,
+          "publicHolidays": [
+            {
+              "day": "2022-01-01",
+              "description": "New Years Day"
+            },
+            {
+              "day": "2022-01-29",
+              "description": "Chinese New Year"
+            },
+            {
+              "day": "2022-01-30",
+              "description": "Chinese New Year"
+            },
+            {
+              "day": "2022-01-31",
+              "description": "Chinese New Year"
+            },
+            {
+              "day": "2022-02-01",
+              "description": "Chinese New Year"
+            },
+            {
+              "day": "2022-02-02",
+              "description": "Chinese New Year"
+            },
+            {
+              "day": "2022-02-03",
+              "description": "Chinese New Year"
+            },
+            {
+              "day": "2022-02-04",
+              "description": "Chinese New Year"
+            },
+            {
+              "day": "2022-02-05",
+              "description": "Chinese New Year"
+            },
+            {
+              "day": "2022-02-06",
+              "description": "Chinese New Year"
+            },
+            {
+              "day": "2022-02-28",
+              "description": "Peace Memorial Day"
+            },
+            {
+              "day": "2022-04-04",
+              "description": "Children Day"
+            },
+            {
+              "day": "2022-04-05",
+              "description": "Qingming Festival"
+            },
+            {
+              "day": "2022-05-02",
+              "description": "Labour Day"
+            },
+            {
+              "day": "2022-06-03",
+              "description": "Dragon Boat Festival"
+            },
+            {
+              "day": "2022-09-10",
+              "description": "Mid-Autumn Festival"
+            },
+            {
+              "day": "2022-10-10",
+              "description": "National Day"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
