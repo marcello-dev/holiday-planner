@@ -178,7 +178,7 @@
 
           // Set header text
           const shortWeekDay = currentDay.toLocaleString('default', {  weekday: 'short' });
-          divColHeader.appendChild(document.createTextNode(shortWeekDay));
+          divColHeader.appendChild(document.createTextNode(shortWeekDay.substring(0, 2)));
           divRowHeader.appendChild(divColHeader);
 
           if (dates.some((leaveDay) => leaveDay.getDate() - 1 === i)) {
