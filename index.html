@@ -11,9 +11,8 @@
 
   <title>Holiday Planner</title>
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-    crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
     integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
     crossorigin="anonymous"></script>
@@ -324,23 +323,20 @@
 
     let data = null;
 
-
     $(document).ready(function () {
 
       $('[data-toggle="tooltip"]').tooltip();
-      $.getJSON('https://raw.githubusercontent.com/marcello-dev/holiday-planner/main/data.json', function (data) {
-        data = JSON.parse(data);
+      $.getJSON('https://raw.githubusercontent.com/marcello-dev/holiday-planner/main/data.json', function (dataAsJson) {
+        data = dataAsJson
+        const countriesDropdown = document.getElementById("countries");
+        countriesDropdown.innerHTML = '<option value="-1"></option>';
+        for (let i = 0; i < data.holidaysPerCountry.length; i++) {
+          let opt = document.createElement('option');
+          opt.value = i;
+          opt.innerHTML = data.holidaysPerCountry[i].country;
+          countriesDropdown.appendChild(opt);
+        }
       });
-
-      const countriesDropdown = document.getElementById("countries");
-      countriesDropdown.innerHTML = '<option value="-1"></option>';
-      for (let i = 0; i < data.holidaysPerCountry.length; i++) {
-        let opt = document.createElement('option');
-        opt.value = i;
-        opt.innerHTML = data.holidaysPerCountry[i].country;
-        countriesDropdown.appendChild(opt);
-      }
-
 
       var forms = document.getElementsByClassName('needs-validation');
       // Loop over them and prevent submission
