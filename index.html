@@ -34,12 +34,12 @@
     <form class="needs-validation" novalidate>
       <div class="form-group">
         <label for="countries">Nazione:</label>
-        <select class="form-control" id="countries" onchange="if (this.selectedIndex) fillYear();" required>
+        <select class="form-control" id="countries" name="select_country" onchange="if (this.selectedIndex) fillYear();" required>
         </select>
       </div>
       <div class="form-group">
         <label for="years">Anno:</label>
-        <select class="form-control" id="years" required>
+        <select class="form-control" id="years" name="select_year" required>
         </select>
       </div>
       <div class="form-group">
@@ -135,28 +135,27 @@
       return map;
     }
 
-    function findBestDays() {
-      const countrySelection = document.getElementById("countries");
-      const country = data.holidaysPerCountry[countrySelection.value];
+    function findBestDays(year, country) {
 
-      const yearsDropdown = document.getElementById("years");
-      const year = country.years[yearsDropdown.value];
+      const countryJson = data.holidaysPerCountry.find(c => c.country == country);
 
-      const leavedaysInput = document.getElementById("leavedays");
+      const yearJson = countryJson.years.find(y => y.year == year);
+
+      const leavedays = document.getElementById("leavedays").value;
 
       let publicHolidaysDates = [];
-      for (const publicHoliday of year.publicHolidays) {
+      for (const publicHoliday of yearJson.publicHolidays) {
         const datePublicHoliday = new Date(publicHoliday.day);
         publicHolidaysDates.push(datePublicHoliday);
       }
-      const bestHolidays = getBestHoliday(year.year, publicHolidaysDates, leavedaysInput.value);
+      const bestHolidays = getBestHoliday(year, publicHolidaysDates, leavedays);
       const groupedHolidays = groupBy(bestHolidays, date => date.getMonth());
 
       // print bestholidays
       const resultDiv = document.getElementById("result");
       resultDiv.innerHTML = '';
       for (const [monthIndex, dates] of groupedHolidays.entries()) {
-        const month = new Date(year.year, monthIndex, 1);
+        const month = new Date(year, monthIndex, 1);
         resultDiv.innerHTML += `<br><p class="font-weight-bold">${month.toLocaleString('default', { month: 'long' })}</p>`;
         const ul = document.createElement('ul');
         resultDiv.appendChild(ul);
@@ -169,7 +168,7 @@
 
         let divRow = null;
         let divRowHeader = null;
-        for (let i = 0; i < daysInMonth(month.getMonth() + 1, year.year); i++) {
+        for (let i = 0; i < daysInMonth(month.getMonth() + 1, year); i++) {
           if (i % 7 == 0) {
             if (divRow != null && divRowHeader != null) {
               resultDiv.appendChild(divRowHeader);
@@ -185,7 +184,7 @@
           const divColHeader = document.createElement('div');
           divColHeader.className = 'col bg-light border-top border-right border-left font-weight-bold';
 
-          const currentDay = new Date(year.year, month.getMonth(), i + 1);
+          const currentDay = new Date(year, month.getMonth(), i + 1);
 
           // Set header text
           const shortWeekDay = currentDay.toLocaleString('default', { weekday: 'short' });
@@ -206,7 +205,7 @@
             divCol.style.backgroundColor = 'rgb(162, 235, 164)';
             const publicHoliday = publicHolidaysDates.find((publicDay) => publicDay.getMonth() == currentDay.getMonth() && currentDay.getDate() == publicDay.getDate());
             let description = "";
-            for (const publicHolidayJson of year.publicHolidays) {
+            for (const publicHolidayJson of yearJson.publicHolidays) {
               const datePublicHoliday = new Date(publicHolidayJson.day);
               if (datePublicHoliday.getMonth() == publicHoliday.getMonth() && datePublicHoliday.getDate() == publicHoliday.getDate()) {
                 description = publicHolidayJson.description;
@@ -338,6 +337,9 @@
         let opt = document.createElement('option');
         opt.value = i;
         opt.innerHTML = country.years[i].year;
+        if(country.years.length - 1 == i){
+          opt.selected = true;
+        }
         yearsDropdown.appendChild(opt);
       }
     }
@@ -359,16 +361,21 @@
         }
       });
 
-      var forms = document.getElementsByClassName('needs-validation');
+      const forms = document.getElementsByClassName('needs-validation');
       // Loop over them and prevent submission
-      var validation = Array.prototype.filter.call(forms, function (form) {
+      const validation = Array.prototype.filter.call(forms, function (form) {
         form.addEventListener('submit', function (event) {
           event.preventDefault();
           if (form.checkValidity() === false) {
             event.stopPropagation();
           }
           else {
-            findBestDays();
+            const selectYear = form.elements.select_year;
+            const year = selectYear.options[selectYear.selectedIndex].text;
+
+            const selectCountry = form.elements.select_country;
+            const country = selectCountry.options[selectCountry.selectedIndex].text;
+            findBestDays(year,country);
           }
           form.classList.add('was-validated');
         }, false);
