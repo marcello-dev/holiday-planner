@@ -90,13 +90,13 @@
         </label>
       </div>
       <br>
-      <button type="submit" id="calculate" class="btn btn-primary">Alloca</button>
+      <button type="submit" class="btn btn-primary">Alloca</button>
     </form>
 
     <hr>
     <h2>Migliori possibilità:</h2>
     <div id="result">
-      ...
+    ...
     </div>
 
   </div>
@@ -154,6 +154,35 @@
       // print bestholidays
       const resultDiv = document.getElementById("result");
       resultDiv.innerHTML = '';
+
+      // Add legend
+      const pLegend = document.createElement('p');
+      pLegend.className='font-weight-bold';
+      pLegend.appendChild(document.createTextNode('Legenda:'));
+      resultDiv.appendChild(pLegend);
+
+
+      const ulLegend = document.createElement('ul');
+      ulLegend.className='list-group list-group-horizontal';
+
+      const liNonWorkingDay = document.createElement('li');
+      liNonWorkingDay.className='list-group-item bg-primary text-white';
+      liNonWorkingDay.appendChild(document.createTextNode('Giorno non lavorativo'));
+
+      const liPublicHoliday = document.createElement('li');
+      liPublicHoliday.className='list-group-item text-primary';
+      liPublicHoliday.style.backgroundColor = 'rgb(162, 235, 164)';
+      liPublicHoliday.appendChild(document.createTextNode('Festività nazionale'));
+
+      const liLeaveDay = document.createElement('li');
+      liLeaveDay.className='list-group-item bg-danger text-white';
+      liLeaveDay.appendChild(document.createTextNode('Giorno di ferie'));
+
+      ulLegend.appendChild(liNonWorkingDay);
+      ulLegend.appendChild(liPublicHoliday);
+      ulLegend.appendChild(liLeaveDay)
+      resultDiv.appendChild(ulLegend);
+
       for (const [monthIndex, dates] of groupedHolidays.entries()) {
         const month = new Date(year, monthIndex, 1);
         resultDiv.innerHTML += `<br><p class="font-weight-bold">${month.toLocaleString('default', { month: 'long' })}</p>`;
@@ -227,6 +256,7 @@
         }
         // enable tooltips just created
         $('[data-toggle="tooltip"]').tooltip();
+
         if (divRow.hasChildNodes()) {
           const remaining = 7 - divRow.childNodes.length;
           for (let i = 0; i < remaining; i++) {
@@ -243,6 +273,7 @@
         }
       }
       resultDiv.appendChild(document.createElement('br'));
+
     }
 
     function daysInMonth(month, year) {
